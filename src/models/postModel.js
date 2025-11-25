@@ -8,9 +8,12 @@ export const PostModel = {
       SELECT
         posts.post_id,
         posts.title,
-        posts.content,
-        posts.thumbnail_url,
+        posts.description,
+        posts.author,
+        posts.read_time,
         posts.created_at,
+        posts.post_url,
+        posts.thumbnail_url,
         categories.name AS category_name
       FROM posts
       LEFT JOIN categories ON posts.category_id = categories.cat_id
@@ -52,13 +55,21 @@ export const PostModel = {
   },
 
   // Create post
-  async create({ title, content, category_id, thumbnail }) {
+  async create({
+    title,
+    description,
+    author,
+    read_time,
+    category_id,
+    post_url,
+    thumbnail,
+  }) {
     const [result] = await pool.query(
       `
-      INSERT INTO posts (title, content, category_id, thumbnail_url)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO posts (title, description, author, read_time, category_id, post_url,thumbnail_url)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
       `,
-      [title, content, category_id, thumbnail]
+      [title, description, author, read_time, category_id, post_url, thumbnail]
     );
 
     return result.insertId;
@@ -85,14 +96,15 @@ export const PostModel = {
   },
 
   // Update post
-  async update(id, { title, content, category_id, thumbnail }) {
+  // NOTE - When update the content of the post wer're not going to update it in database just in backend.
+  async update(id, { title, description }) {
     const [result] = await pool.query(
       `
       UPDATE posts
-      SET title = ?, content = ?, category_id = ?, thumbnail_url = ?
+      SET title = ?, description = ?
       WHERE post_id = ?
       `,
-      [title, content, category_id, thumbnail, id]
+      [title, description, id]
     );
 
     return result.affectedRows > 0;
@@ -104,7 +116,9 @@ export const PostModel = {
     await pool.query(`DELETE FROM posts_tags WHERE post_id = ?`, [id]);
 
     // delete post
-    const [result] = await pool.query(`DELETE FROM posts WHERE post_id = ?`, [id]);
+    const [result] = await pool.query(`DELETE FROM posts WHERE post_id = ?`, [
+      id,
+    ]);
 
     return result.affectedRows > 0;
   },
