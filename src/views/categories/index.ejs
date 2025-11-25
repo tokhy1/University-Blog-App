@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Categories</title>
+  <link rel="stylesheet" href="/css/categories.css">
+</head>
+<body>
+
+  <%- include("../partials/navbar") %>
+
+  <div class="container">
+    <h1>Categories</h1>
+
+    <a href="/categories/create" class="btn btn-primary">Add New Category</a>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if (categories.length === 0) { %>
+          <tr>
+            <td colspan="4">No categories found.</td>
+          </tr>
+        <% } else { %>
+          <% categories.forEach(cat => { %>
+            <tr>
+              <td><%= cat.cat_id %></td>
+              <td><%= cat.name %></td>
+              <td><%= cat.description %></td>
+              <td>
+                <a href="/categories/<%= cat.cat_id %>/edit" class="btn btn-warning">Edit</a>
+
+                <form action="/categories/<%= cat.cat_id %>/delete" method="POST" style="display:inline;">
+                  <button class="btn btn-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <%- include("../partials/footer") %>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Category</title>
+  <link rel="stylesheet" href="/css/categories.css">
+</head>
+<body>
+
+  <%- include("../partials/navbar") %>
+
+  <div class="container">
+    <h1>Add New Category</h1>
+
+    <form action="/categories/new" method="POST" class="form">
+
+      <label>Name</label>
+      <input type="text" name="name" required>
+
+      <label>Description</label>
+      <textarea name="description" rows="4"></textarea>
+
+      <button class="btn btn-success">Create</button>
+    </form>
+  </div>
+
+  <%- include("../partials/footer") %>
+</body>
+</html>
