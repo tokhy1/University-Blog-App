@@ -1,6 +1,6 @@
 import pool from "./db.js";
 
-export const CategoryModel = 
+export const CategoryModel = {
   // Get all categories
   async getAll() {
     const [rows] = await pool.query(
