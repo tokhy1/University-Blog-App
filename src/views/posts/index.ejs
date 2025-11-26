@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/css/allPosts.css" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <title>All Posts</title>
+  </head>
+  <body>
+    <div class="page-container">
+      <h2 class="page-title">All Posts</h2>
+      <div class="blog-grid">
+        <% posts.forEach(post => { %>
+          <div class="blog-card">
+            <img src="<%= post.thumbnail_url %>" class="blog-img" />
+            <div class="blog-meta-row">
+              <div class="blog-meta">
+                <span><%= post.author %></span>
+                <span>•</span>
+                <span><%= post.read_time %> min read</span>
+              </div>
+              <div class="blog-icons">
+                <a class="icon-wrapper" data-tooltip="Edit" href="/posts/edit/<%= post._id %>">
+                  <!-- Pencil SVG here -->
+                </a>
+                <a class="icon-wrapper" data-tooltip="Delete" href="/posts/delete/<%= post._id %>">
+                  <!-- Trash SVG here -->
+                </a>
+              </div>
+            </div>
+            <h3 class="blog-title"><%= post.title %></h3>
+            <p class="blog-text"><%= post.description %></p>
+            <a href="/posts/<%= post.post_id %>" class="view-btn">View Post</a>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </body>
+</html>

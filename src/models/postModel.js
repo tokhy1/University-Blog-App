@@ -62,19 +62,26 @@ export const PostModel = {
     read_time,
     category_id,
     post_url,
-    thumbnail,
+    thumbnail_url,
   }) {
     const [result] = await pool.query(
       `
-      INSERT INTO posts (title, description, author, read_time, category_id, post_url,thumbnail_url)
+      INSERT INTO posts (title, description, author, read_time, category_id, post_url, thumbnail_url)
       VALUES (?, ?, ?, ?, ?, ?, ?)
       `,
-      [title, description, author, read_time, category_id, post_url, thumbnail]
+      [
+        title,
+        description,
+        author,
+        read_time,
+        category_id,
+        post_url,
+        thumbnail_url,
+      ]
     );
 
     return result.insertId;
   },
-
   // Attach tags to post
   async attachTags(postId, tagIds) {
     if (!tagIds || tagIds.length === 0) return;

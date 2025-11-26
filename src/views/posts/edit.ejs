@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/css/AllPosts.css" rel="stylesheet" />
+    <title>Edit Post - <%= post.title %></title>
+    <style>
+      .edit-container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 20px 18px 24px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        font-family: Arial, sans-serif;
+      }
+
+      .edit-container h2 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #0d1b2a;
+      }
+
+      .edit-container label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 6px;
+        color: #333;
+      }
+
+      .edit-container input,
+      .edit-container textarea {
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-family: inherit;
+        font-size: 14px;
+        margin-bottom: 12px;
+        box-sizing: border-box;
+      }
+
+      .edit-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 5px;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+      }
+
+      .btn-primary {
+        background: #0d1b2a;
+        color: #fff;
+      }
+
+      .btn-secondary {
+        background: #ddd;
+        color: #333;
+      }
+
+      .current-thumbnail {
+        margin-bottom: 12px;
+      }
+
+      .current-thumbnail img {
+        max-width: 150px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="edit-container">
+      <h2>Edit Post</h2>
+      <form action="/posts/update/<%= post.post_id %>" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_method" value="PUT" />
+
+        <label for="title">Title</label>
+        <input id="title" name="title" type="text" value="<%= post.title %>" required />
+
+        <label for="description">Short description</label>
+        <input
+          id="description"
+          name="description"
+          type="text"
+          value="<%= post.description %>"
+          required
+        />
+
+        <label for="author">Author</label>
+        <input
+          id="author"
+          name="author"
+          type="text"
+          value="<%= post.author %>"
+          required
+        />
+
+        <label for="read_time">Read Time (minutes)</label>
+        <input
+          id="read_time"
+          name="read_time"
+          type="number"
+          min="1"
+          value="<%= post.read_time %>"
+        />
+
+
+        <label for="content">Content (Markdown)</label>
+        <textarea id="content" name="content" rows="10" required><%= mdContent %></textarea>
+
+        <div class="edit-buttons">
+          <button type="submit" class="btn-primary">Save changes</button>
+          <a href="/posts/<%= post.post_id %>" class="btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
