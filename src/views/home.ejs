@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -7,33 +7,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-gray-50 min-h-screen font-sans text-gray-800">
+    
+    <%- include("./partials/navbar.ejs") %>
+
     <main class="max-w-7xl mx-auto px-6 py-10 flex gap-6">
       <!-- SIDEBAR TAGS -->
       <aside class="w-64 p-4 bg-white rounded-2xl shadow-md flex-shrink-0">
         <h3 class="text-lg font-semibold mb-4">Tags</h3>
         <form id="tagForm" class="flex flex-col gap-2">
           <% allTags.forEach(tag => { %>
-            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
-              <input
-                type="checkbox" 
-                name="tags" 
-                value="<%= tag.tag_id %>"
-                <%= selectedTags.includes(String(tag.tag_id)) ? 'checked' : '' %>
-                onchange="document.getElementById('tagForm').submit()"
-                class="rounded"
-              >
-              <span class="text-sm"><%= tag.name %></span>
-            </label>
-          <% }); %>
-          
-          <% if (selectedTags.length > 0) { %>
-            <button 
-              type="button" 
-              onclick="clearFilters('tags')"
-              class="mt-2 text-sm text-blue-600 hover:text-blue-800"
-            >
-              Clear tag filters
-            </button>
+          <label
+            class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded"
+          >
+            <input type="checkbox" name="tags" value="<%= tag.tag_id %>" <%=
+            selectedTags.includes(String(tag.tag_id)) ? 'checked' : '' %>
+            onchange="document.getElementById('tagForm').submit()"
+            class="rounded" >
+            <span class="text-sm"><%= tag.name %></span>
+          </label>
+          <% }); %> <% if (selectedTags.length > 0) { %>
+          <button
+            type="button"
+            onclick="clearFilters('tags')"
+            class="mt-2 text-sm text-blue-600 hover:text-blue-800"
+          >
+            Clear tag filters
+          </button>
           <% } %>
         </form>
       </aside>
@@ -41,21 +40,24 @@
       <div class="flex-1">
         <!-- HERO TEXT -->
         <section class="text-center mb-8">
-          <h2 class="text-4xl font-bold mb-2">Welcome to the Blog</h2>
-          <p class="text-gray-600">Latest posts, tips and stories. Scroll down to read.</p>
-          
+          <h2 class="text-4xl font-bold mb-2">Welcome to the Phlog</h2>
+          <p class="text-gray-600">
+            Latest posts, tips and stories. Scroll down to read.
+          </p>
+
           <% if (selectedTags.length > 0 || selectedCategories.length > 0) { %>
-            <div class="mt-4">
-              <p class="text-sm text-gray-600">
-                Showing <%= posts.length %> filtered post<%= posts.length !== 1 ? 's' : '' %>
-                <button 
-                  onclick="window.location.href='/'"
-                  class="ml-2 text-blue-600 hover:text-blue-800"
-                >
-                  Clear all filters
-                </button>
-              </p>
-            </div>
+          <div class="mt-4">
+            <p class="text-sm text-gray-600">
+              Showing <%= posts.length %> filtered post<%= posts.length !== 1 ?
+              's' : '' %>
+              <button
+                onclick="window.location.href='/'"
+                class="ml-2 text-blue-600 hover:text-blue-800"
+              >
+                Clear all filters
+              </button>
+            </p>
+          </div>
           <% } %>
         </section>
 
@@ -64,126 +66,161 @@
           <h3 class="text-xl font-semibold mb-4">Categories</h3>
           <form id="categoryForm" class="flex flex-wrap justify-center gap-2">
             <% allCategories.forEach(category => { %>
-              <label class="cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  name="categories" 
-                  value="<%= category.cat_id %>"
-                  <%= selectedCategories.includes(String(category.cat_id)) ? 'checked' : '' %>
-                  onchange="document.getElementById('categoryForm').submit()"
-                  class="hidden"
-                >
-                <span class="px-3 py-1 rounded-full <%= selectedCategories.includes(String(category.cat_id)) ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300' %>">
-                  <%= category.name %>
-                </span>
-              </label>
+            <label class="cursor-pointer">
+              <input type="checkbox" name="categories" value="<%=
+              category.cat_id %>" <%=
+              selectedCategories.includes(String(category.cat_id)) ? 'checked' :
+              '' %> onchange="document.getElementById('categoryForm').submit()"
+              class="hidden" >
+              <span
+                class="px-3 py-1 rounded-full <%= selectedCategories.includes(String(category.cat_id)) ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300' %>"
+              >
+                <%= category.name %>
+              </span>
+            </label>
             <% }); %>
           </form>
         </section>
 
         <!-- POSTS GRID -->
         <% if (posts.length === 0) { %>
-          <div class="text-center py-12">
-            <p class="text-gray-600 text-lg">No posts found with the selected filters.</p>
-            <button 
-              onclick="window.location.href='/'"
-              class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
-              Show all posts
-            </button>
-          </div>
+        <div class="text-center py-12">
+          <p class="text-gray-600 text-lg">
+            No posts found with the selected filters.
+          </p>
+          <button
+            onclick="window.location.href='/'"
+            class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          >
+            Show all posts
+          </button>
+        </div>
         <% } else { %>
-          <section class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            <% posts.forEach(post => { %>
-              <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition">
-                <% if (post.thumbnail_url) { %>
-                  <img src="<%= post.thumbnail_url %>" alt="<%= post.title %>" class="w-full h-40 object-cover">
-                <% } else { %>
-                  <div class="w-full h-40 bg-gray-200 flex items-center justify-center">
-                    <span class="text-gray-400">No image</span>
-                  </div>
+        <section class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <% posts.forEach(post => { %>
+          <article
+            class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition"
+          >
+            <% if (post.thumbnail_url) { %>
+            <img
+              src="<%= post.thumbnail_url %>"
+              alt="<%= post.title %>"
+              class="w-full h-40 object-cover"
+            />
+            <% } else { %>
+            <div
+              class="w-full h-40 bg-gray-200 flex items-center justify-center"
+            >
+              <span class="text-gray-400">No image</span>
+            </div>
+            <% } %>
+
+            <div
+              class="flex items-center justify-between text-sm text-gray-600 px-4 mt-2"
+            >
+              <span><%= post.author %> • <%= post.read_time %> min read</span>
+              <div class="flex items-center gap-2">
+                <a href="/posts/<%= post.post_id %>/edit">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="#007bff"
+                    class="w-5 h-5 cursor-pointer"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.75 19.5 3 21l1.5-3.75L16.862 4.487z"
+                    />
+                  </svg>
+                </a>
+                <form
+                  action="/posts/<%= post.post_id %>/delete"
+                  method="POST"
+                  style="display: inline"
+                  onsubmit="return confirm('Are you sure you want to delete this post?')"
+                >
+                  <button type="submit">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="#007bff"
+                      class="w-5 h-5 cursor-pointer"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 7h12M9 7V4h6v3m-7 4v8m4-8v8m4-8v8M4 7h16l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 7z"
+                      />
+                    </svg>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <div class="p-4">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-lg font-semibold"><%= post.title %></h3>
+                <% if (post.category_name) { %>
+                <span
+                  class="text-xs px-2 py-1 rounded-full border text-gray-600"
+                >
+                  <%= post.category_name %>
+                </span>
                 <% } %>
-                
-                <div class="flex items-center justify-between text-sm text-gray-600 px-4 mt-2">
-                  <span><%= post.author %> • <%= post.read_time %> min read</span>
-                  <div class="flex items-center gap-2">
-                    <a href="/posts/<%= post.post_id %>/edit">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke-width="1.5" stroke="#007bff"
-                        class="w-5 h-5 cursor-pointer">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.75 19.5 3 21l1.5-3.75L16.862 4.487z" />
-                      </svg>
-                    </a>
-                    <form action="/posts/<%= post.post_id %>/delete" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this post?')">
-                      <button type="submit">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                          stroke-width="1.5" stroke="#007bff"
-                          class="w-5 h-5 cursor-pointer">
-                          <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M6 7h12M9 7V4h6v3m-7 4v8m4-8v8m4-8v8M4 7h16l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 7z" />
-                        </svg>
-                      </button>
-                    </form>
-                  </div>
-                </div>
-                
-                <div class="p-4">
-                  <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-lg font-semibold"><%= post.title %></h3>
-                    <% if (post.category_name) { %>
-                      <span class="text-xs px-2 py-1 rounded-full border text-gray-600">
-                        <%= post.category_name %>
-                      </span>
-                    <% } %>
-                  </div>
-                  
-                  <p class="text-gray-600 text-sm mb-2">
-                    <%= post.description %>
-                  </p>
-                  
-                  <% if (post.tags && post.tags.length > 0) { %>
-                    <div class="flex gap-2 flex-wrap mt-2">
-                      <% post.tags.forEach(tag => { %>
-                        <span class="px-2 py-1 text-xs bg-gray-200 rounded-full">
-                          <%= tag.name %>
-                        </span>
-                      <% }); %>
-                    </div>
-                  <% } %>
-                  
-                  <div class="flex gap-2 mt-2">
-                    <a href="/posts/<%= post.post_id %>" class="ml-auto inline-block px-3 py-2 rounded-xl border hover:bg-gray-100">
-                      View post
-                    </a>
-                  </div>
-                </div>
-              </article>
-            <% }); %>
-          </section>
+              </div>
+
+              <p class="text-gray-600 text-sm mb-2"><%= post.description %></p>
+
+              <% if (post.tags && post.tags.length > 0) { %>
+              <div class="flex gap-2 flex-wrap mt-2">
+                <% post.tags.forEach(tag => { %>
+                <span class="px-2 py-1 text-xs bg-gray-200 rounded-full">
+                  <%= tag.name %>
+                </span>
+                <% }); %>
+              </div>
+              <% } %>
+
+              <div class="flex gap-2 mt-2">
+                <a
+                  href="/posts/<%= post.post_id %>"
+                  class="ml-auto inline-block px-3 py-2 rounded-xl border hover:bg-gray-100"
+                >
+                  View post
+                </a>
+              </div>
+            </div>
+          </article>
+          <% }); %>
+        </section>
         <% } %>
 
         <!-- SHOW ALL POSTS BUTTON -->
         <div class="mt-8 text-center">
-          <a href="/posts" class="px-4 py-2 rounded-2xl border hover:shadow inline-block">
+          <a
+            href="/posts"
+            class="px-4 py-2 rounded-2xl border hover:shadow inline-block"
+          >
             Show all posts
           </a>
         </div>
       </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="mt-16 border-t bg-white">
-      <div class="max-w-7xl mx-auto px-6 py-6 text-sm text-gray-600">
-        © 2025 Blog
-      </div>
-    </footer>
+    <%- include("./partials/footer") %>
 
     <script>
       function clearFilters(type) {
-        const form = document.getElementById(type === 'tags' ? 'tagForm' : 'categoryForm');
+        const form = document.getElementById(
+          type === "tags" ? "tagForm" : "categoryForm"
+        );
         const checkboxes = form.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(cb => cb.checked = false);
+        checkboxes.forEach((cb) => (cb.checked = false));
         form.submit();
       }
     </script>

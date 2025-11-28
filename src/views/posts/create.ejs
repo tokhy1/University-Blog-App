@@ -8,17 +8,7 @@
   </head>
   <body class="bg-gray-50 min-h-screen font-sans">
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b">
-      <div class="max-w-7xl mx-auto px-6 py-4">
-        <div class="flex items-center justify-between">
-          <a href="/" class="text-2xl font-bold text-gray-900">Blog</a>
-          <div class="flex gap-4">
-            <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
-            <a href="/posts" class="text-gray-600 hover:text-gray-900">All Posts</a>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <%- include("../partials/navbar") %>
 
     <main class="max-w-3xl mx-auto px-6 py-10">
       <div class="bg-white rounded-2xl shadow-sm p-8">
@@ -28,7 +18,10 @@
         <form action="/posts/new" method="POST" enctype="multipart/form-data">
           <!-- Title -->
           <div class="mb-6">
-            <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+            <label
+              for="title"
+              class="block text-sm font-semibold text-gray-700 mb-2"
+            >
               Post Title *
             </label>
             <input
@@ -43,7 +36,10 @@
 
           <!-- Description -->
           <div class="mb-6">
-            <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
+            <label
+              for="description"
+              class="block text-sm font-semibold text-gray-700 mb-2"
+            >
               Short Description *
             </label>
             <textarea
@@ -59,7 +55,10 @@
           <!-- Author & Read Time -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label for="author" class="block text-sm font-semibold text-gray-700 mb-2">
+              <label
+                for="author"
+                class="block text-sm font-semibold text-gray-700 mb-2"
+              >
                 Author *
               </label>
               <input
@@ -73,7 +72,10 @@
             </div>
 
             <div>
-              <label for="read_time" class="block text-sm font-semibold text-gray-700 mb-2">
+              <label
+                for="read_time"
+                class="block text-sm font-semibold text-gray-700 mb-2"
+              >
                 Read Time (minutes) *
               </label>
               <input
@@ -90,7 +92,10 @@
 
           <!-- Category -->
           <div class="mb-6">
-            <label for="category_id" class="block text-sm font-semibold text-gray-700 mb-2">
+            <label
+              for="category_id"
+              class="block text-sm font-semibold text-gray-700 mb-2"
+            >
               Category *
             </label>
             <select
@@ -100,11 +105,12 @@
               required
             >
               <option value="" disabled selected>Choose a category</option>
-              <% if (typeof categories !== 'undefined' && categories) { %>
-                <% categories.forEach(category => { %>
-                  <option value="<%= category.cat_id %>"><%= category.name %></option>
-                <% }); %>
-              <% } %>
+              <% if (typeof categories !== 'undefined' && categories) { %> <%
+              categories.forEach(category => { %>
+              <option value="<%= category.cat_id %>">
+                <%= category.name %>
+              </option>
+              <% }); %> <% } %>
             </select>
           </div>
 
@@ -113,26 +119,32 @@
             <label class="block text-sm font-semibold text-gray-700 mb-2">
               Tags (select multiple)
             </label>
-            <div class="border border-gray-300 rounded-lg p-4 max-h-48 overflow-y-auto bg-gray-50">
-              <% if (typeof tags !== 'undefined' && tags) { %>
-                <% tags.forEach(tag => { %>
-                  <label class="flex items-center gap-2 py-2 hover:bg-white px-2 rounded cursor-pointer">
-                    <input
-                      type="checkbox"
-                      name="tags[]"
-                      value="<%= tag.tag_id %>"
-                      class="rounded text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span class="text-sm text-gray-700"><%= tag.name %></span>
-                  </label>
-                <% }); %>
-              <% } %>
+            <div
+              class="border border-gray-300 rounded-lg p-4 max-h-48 overflow-y-auto bg-gray-50"
+            >
+              <% if (typeof tags !== 'undefined' && tags) { %> <%
+              tags.forEach(tag => { %>
+              <label
+                class="flex items-center gap-2 py-2 hover:bg-white px-2 rounded cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  name="tags"
+                  value="<%= tag.tag_id %>"
+                  class="rounded text-blue-600 focus:ring-2 focus:ring-blue-500"
+                />
+                <span class="text-sm text-gray-700"><%= tag.name %></span>
+              </label>
+              <% }); %> <% } %>
             </div>
           </div>
 
           <!-- Thumbnail Upload -->
           <div class="mb-6">
-            <label for="thumbnail" class="block text-sm font-semibold text-gray-700 mb-2">
+            <label
+              for="thumbnail"
+              class="block text-sm font-semibold text-gray-700 mb-2"
+            >
               Thumbnail Image
             </label>
             <input
@@ -142,12 +154,17 @@
               accept="image/*"
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
-            <p class="mt-1 text-xs text-gray-500">PNG, JPG, or JPEG (Max 10MB)</p>
+            <p class="mt-1 text-xs text-gray-500">
+              PNG, JPG, or JPEG (Max 10MB)
+            </p>
           </div>
 
           <!-- Content (Markdown) -->
           <div class="mb-6">
-            <label for="content" class="block text-sm font-semibold text-gray-700 mb-2">
+            <label
+              for="content"
+              class="block text-sm font-semibold text-gray-700 mb-2"
+            >
               Post Content (Markdown) *
             </label>
             <textarea
@@ -167,7 +184,9 @@
 - List item 2"
               required
             ></textarea>
-            <p class="mt-1 text-xs text-gray-500">Supports Markdown formatting</p>
+            <p class="mt-1 text-xs text-gray-500">
+              Supports Markdown formatting
+            </p>
           </div>
 
           <!-- Buttons -->
@@ -190,10 +209,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="mt-16 border-t bg-white">
-      <div class="max-w-7xl mx-auto px-6 py-6 text-sm text-gray-600 text-center">
-        © 2025 Blog. All rights reserved.
-      </div>
-    </footer>
+    <%- include("../partials/footer") %>
+    
   </body>
 </html>

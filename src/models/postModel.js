@@ -209,19 +209,17 @@ export const PostModel = {
 
     return result.insertId;
   },
+  
   // Attach tags to post
   async attachTags(postId, tagIds) {
     if (!tagIds || tagIds.length === 0) return;
 
-    const values = tagIds.map((tagId) => [postId, tagId]);
-
-    await pool.query(
-      `
-      INSERT INTO posts_tags (post_id, tag_id)
-      VALUES ?
-      `,
-      [values]
-    );
+    for (const tagId of tagIds) {
+      await pool.query(
+        `INSERT INTO posts_tags (post_id, tag_id) VALUES (?, ?)`,
+        [postId, tagId]
+      );
+    }
   },
 
   // Clear tags before updating

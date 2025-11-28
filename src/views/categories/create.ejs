@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Create Category</title>
-  <link rel="stylesheet" href="/css/categories.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Create Category</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/categories.css" />
+  </head>
+  <body>
+    <%- include("../partials/navbar") %>
 
-  <%- include("../partials/navbar") %>
+    <div class="container">
+      <h1>Add New Category</h1>
 
-  <div class="container">
-    <h1>Add New Category</h1>
+      <form action="/categories/new" method="POST" class="form">
+        <label>Name</label>
+        <input type="text" name="name" required />
 
-    <form action="/categories/new" method="POST" class="form">
+        <label>Description</label>
+        <textarea name="description" rows="4"></textarea>
 
-      <label>Name</label>
-      <input type="text" name="name" required>
+        <button class="btn btn-success">Create</button>
+      </form>
+    </div>
 
-      <label>Description</label>
-      <textarea name="description" rows="4"></textarea>
-
-      <button class="btn btn-success">Create</button>
-    </form>
-  </div>
-
-  <%- include("../partials/footer") %>
-</body>
+    <%- include("../partials/footer") %>
+  </body>
 </html>

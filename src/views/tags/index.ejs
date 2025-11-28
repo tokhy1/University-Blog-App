@@ -1,52 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>All Tags</title>
-  <link rel="stylesheet" href="/css/categories.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>All Tags</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/categories.css" />
+  </head>
+  <body>
+    <%- include("../partials/navbar") %>
 
-  <%- include("../partials/navbar") %>
+    <div class="container">
+      <h1>Tags</h1>
 
-  <div class="container">
-    <h1>Tags</h1>
+      <a href="/tags/create" class="btn btn-primary">Add New Tag</a>
 
-    <a href="/tags/create" class="btn btn-primary">Add New Tag</a>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% if (tags.length === 0) { %>
+        <tbody>
+          <% if (tags.length === 0) { %>
           <tr>
             <td colspan="4">No tags found.</td>
           </tr>
-        <% } else { %>
-          <% tags.forEach(tag => { %>
-            <tr>
-              <td><%= tag.tag_id %></td>
-              <td><%= tag.name %></td>
-              <td>
-                <a href="/tags/<%= tag.tag_id %>/edit" class="btn btn-warning">Edit</a>
+          <% } else { %> <% tags.forEach(tag => { %>
+          <tr>
+            <td><%= tag.tag_id %></td>
+            <td><%= tag.name %></td>
+            <td>
+              <a href="/tags/<%= tag.tag_id %>/edit" class="btn btn-warning"
+                >Edit</a
+              >
 
-                <form action="/tags/<%= tag.tag_id %>/delete" method="POST" style="display:inline;">
-                  <button class="btn btn-danger">Delete</button>
-                </form>
-              </td>
-            </tr>
-          <% }) %>
-        <% } %>
-      </tbody>
-    </table>
-  </div>
+              <form
+                action="/tags/<%= tag.tag_id %>/delete"
+                method="POST"
+                style="display: inline"
+              >
+                <button class="btn btn-danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+          <% }) %> <% } %>
+        </tbody>
+      </table>
+    </div>
 
-  <%- include("../partials/footer") %>
-</body>
+    <%- include("../partials/footer") %>
+  </body>
 </html>

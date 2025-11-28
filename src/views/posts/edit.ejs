@@ -8,17 +8,7 @@
   </head>
   <body class="bg-gray-50 min-h-screen font-sans">
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b">
-      <div class="max-w-7xl mx-auto px-6 py-4">
-        <div class="flex items-center justify-between">
-          <a href="/" class="text-2xl font-bold text-gray-900">Blog</a>
-          <div class="flex gap-4">
-            <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
-            <a href="/posts" class="text-gray-600 hover:text-gray-900">All Posts</a>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <%- include("../partials/navbar") %>
 
     <main class="max-w-3xl mx-auto px-6 py-10">
       <div class="bg-white rounded-2xl shadow-sm p-8">
@@ -123,7 +113,7 @@
                   <label class="flex items-center gap-2 py-2 hover:bg-white px-2 rounded cursor-pointer">
                     <input
                       type="checkbox"
-                      name="tags[]"
+                      name="tags"
                       value="<%= tag.tag_id %>"
                       <%= selectedTagIds.includes(tag.tag_id) ? 'checked' : '' %>
                       class="rounded text-blue-600 focus:ring-2 focus:ring-blue-500"
@@ -195,10 +185,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="mt-16 border-t bg-white">
-      <div class="max-w-7xl mx-auto px-6 py-6 text-sm text-gray-600 text-center">
-        © 2025 Blog. All rights reserved.
-      </div>
-    </footer>
+    <%- include("../partials/footer") %>
+    
   </body>
 </html>

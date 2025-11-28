@@ -1,31 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Edit Tag</title>
-  <link rel="stylesheet" href="/css/categories.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Edit Tag</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/categories.css" />
+  </head>
+  <body>
+    <%- include("../partials/navbar") %>
 
-  <%- include("../partials/navbar") %>
+    <div class="container">
+      <h1>Edit Tag</h1>
 
-  <div class="container">
-    <h1>Edit Tag</h1>
+      <form action="/tags/update/<%= tag.tag_id %>" method="POST" class="form">
+        <label>Name</label>
+        <input type="text" name="name" value="<%= tag.name %>" required />
 
-    <form action="/tags/update/<%= tag.tag_id %>" method="POST" class="form">
+        <button class="btn btn-primary">Update</button>
+      </form>
+    </div>
 
-      <label>Name</label>
-      <input 
-        type="text" 
-        name="name" 
-        value="<%= tag.name %>"
-        required
-      >
-
-      <button class="btn btn-primary">Update</button>
-    </form>
-  </div>
-
-  <%- include("../partials/footer") %>
-</body>
+    <%- include("../partials/footer") %>
+  </body>
 </html>
