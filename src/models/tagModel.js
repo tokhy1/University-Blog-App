@@ -15,4 +15,29 @@ export const TagModel = {
     );
     return rows[0];
   },
+
+  // Create new tag
+  async create({ name }) {
+    const [result] = await pool.query("INSERT INTO tags (name) VALUES (?)", [
+      name,
+    ]);
+    return result.insertId; // returns the new Tag ID
+  },
+
+  // Update tag
+  async update(id, { name }) {
+    const [result] = await pool.query(
+      "UPDATE tags SET name = ? WHERE tag_id = ?",
+      [name, id]
+    );
+    return result.affectedRows > 0;
+  },
+
+  // Delete tag
+  async delete(id) {
+    const [result] = await pool.query("DELETE FROM tags WHERE tag_id = ?", [
+      id,
+    ]);
+    return result.affectedRows > 0;
+  },
 };

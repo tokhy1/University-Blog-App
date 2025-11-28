@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>All Posts - Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 min-h-screen font-sans text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+      <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <a href="/" class="text-2xl font-bold text-gray-900">Blog</a>
+          <div class="flex gap-4">
+            <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
+            <a href="/posts" class="text-gray-900 font-semibold">All Posts</a>
+            <a href="/posts/create" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+              Create Post
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-4xl font-bold mb-2">All Posts</h1>
+        <p class="text-gray-600">Browse through all published articles</p>
+      </div>
+
+      <!-- Posts Grid -->
+      <% if (posts.length === 0) { %>
+        <div class="text-center py-12">
+          <p class="text-gray-600 text-lg mb-4">No posts available yet.</p>
+          <a href="/posts/create" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Create Your First Post
+          </a>
+        </div>
+      <% } else { %>
+        <section class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <% posts.forEach(post => { %>
+            <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition">
+              <!-- Thumbnail -->
+              <% if (post.thumbnail_url) { %>
+                <img src="<%= post.thumbnail_url %>" alt="<%= post.title %>" class="w-full h-48 object-cover">
+              <% } else { %>
+                <div class="w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              <% } %>
+              
+              <!-- Meta Info -->
+              <div class="flex items-center justify-between text-sm text-gray-600 px-4 mt-3">
+                <div class="flex items-center gap-2">
+                  <span class="font-medium"><%= post.author %></span>
+                  <span>•</span>
+                  <span><%= post.read_time %> min read</span>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex items-center gap-2">
+                  <a href="/posts/<%= post.post_id %>/edit" title="Edit post">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                      stroke-width="1.5" stroke="currentColor"
+                      class="w-5 h-5 text-blue-600 hover:text-blue-800 cursor-pointer">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                    </svg>
+                  </a>
+                  <form action="/posts/<%= post.post_id %>/delete" method="POST" style="display: inline;" 
+                        onsubmit="return confirm('Are you sure you want to delete this post?')">
+                    <button type="submit" title="Delete post">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor"
+                        class="w-5 h-5 text-red-600 hover:text-red-800 cursor-pointer">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                      </svg>
+                    </button>
+                  </form>
+                </div>
+              </div>
+              
+              <!-- Content -->
+              <div class="p-4">
+                <div class="flex items-start justify-between mb-2 gap-2">
+                  <h3 class="text-lg font-semibold text-gray-900 line-clamp-2 flex-1">
+                    <%= post.title %>
+                  </h3>
+                  <% if (post.category_name) { %>
+                    <span class="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700 border border-gray-200 whitespace-nowrap">
+                      <%= post.category_name %>
+                    </span>
+                  <% } %>
+                </div>
+                
+                <p class="text-gray-600 text-sm mb-3 line-clamp-2">
+                  <%= post.description %>
+                </p>
+                
+                <!-- Tags -->
+                <% if (post.tags && post.tags.length > 0) { %>
+                  <div class="flex gap-2 flex-wrap mb-3">
+                    <% post.tags.slice(0, 3).forEach(tag => { %>
+                      <span class="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-full">
+                        <%= tag.name %>
+                      </span>
+                    <% }); %>
+                    <% if (post.tags.length > 3) { %>
+                      <span class="px-2 py-1 text-xs text-gray-500">
+                        +<%= post.tags.length - 3 %> more
+                      </span>
+                    <% } %>
+                  </div>
+                <% } %>
+                
+                <!-- Date -->
+                <div class="text-xs text-gray-500 mb-3">
+                  <%= new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                </div>
+                
+                <!-- View Post Button -->
+                <a href="/posts/<%= post.post_id %>" 
+                   class="inline-block w-full text-center px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 text-sm font-medium transition">
+                  View Post
+                </a>
+              </div>
+            </article>
+          <% }); %>
+        </section>
+      <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 border-t bg-white">
+      <div class="max-w-7xl mx-auto px-6 py-6 text-sm text-gray-600 text-center">
+        © 2025 Blog. All rights reserved.
+      </div>
+    </footer>
+  </body>
+</html>

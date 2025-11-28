@@ -12,7 +12,6 @@ const __dirname = path.dirname(__filename);
 
 export const PostController = {
   // GET / or /posts → Home page with optional filters
-  // GET / or /posts → Home page with optional filters
   async home(req, res, next) {
     try {
       const { tags, categories } = req.query;
@@ -161,18 +160,31 @@ export const PostController = {
   },
 
   // GET /posts/create → show create form
-  createForm(req, res) {
-    res.render("posts/create");
+  async createForm(req, res, next) {
+    try {
+      const categories = await CategoryModel.getAll();
+      const tags = await TagModel.getAll();
+      res.render("posts/create", { categories, tags });
+    } catch (err) {
+      next(err);
+    }
   },
 
   // POST /posts → save new post
   async create(req, res, next) {
     try {
-      const { title, description, author, read_time, category_id, content } =
-        req.body;
+      const {
+        title,
+        description,
+        author,
+        read_time,
+        category_id,
+        content,
+        tags,
+      } = req.body;
       const thumbnail = req.files?.thumbnail;
 
-      // save markdown file
+      // Save markdown file
       const fileName = `${Date.now()}-${title.replace(/\s+/g, "-")}.md`;
       const filePath = path.join(
         __dirname,
@@ -184,7 +196,7 @@ export const PostController = {
       );
       fs.writeFileSync(filePath, content, "utf-8");
 
-      // save thumbnail file if exists
+      // Save thumbnail file if exists
       let thumbnail_url = null;
       if (thumbnail) {
         const thumbName = `${Date.now()}-${thumbnail.name}`;
@@ -200,6 +212,7 @@ export const PostController = {
         thumbnail_url = `/uploads/images/${thumbName}`;
       }
 
+      // Create post
       const postId = await PostModel.create({
         title,
         description,
@@ -209,6 +222,12 @@ export const PostController = {
         post_url: `/uploads/posts/${fileName}`,
         thumbnail_url,
       });
+
+      // Attach tags if selected
+      if (tags) {
+        const tagIds = Array.isArray(tags) ? tags : [tags];
+        await PostModel.attachTags(postId, tagIds);
+      }
 
       res.redirect(`/posts/${postId}`);
     } catch (err) {
@@ -226,14 +245,18 @@ export const PostController = {
         return next(error);
       }
 
-      // read markdown content to prefill textarea
+      // Read markdown content
       const mdPath = path.join(__dirname, "..", "public", post.post_url);
       let mdContent = "";
       if (fs.existsSync(mdPath)) {
         mdContent = fs.readFileSync(mdPath, "utf-8");
       }
 
-      res.render("posts/edit", { post, mdContent });
+      // Get categories and tags
+      const categories = await CategoryModel.getAll();
+      const tags = await TagModel.getAll();
+
+      res.render("posts/edit", { post, mdContent, categories, tags });
     } catch (err) {
       next(err);
     }
@@ -242,8 +265,15 @@ export const PostController = {
   // POST /posts/:id → update post
   async update(req, res, next) {
     try {
-      const { title, description, author, read_time, category_id, content } =
-        req.body;
+      const {
+        title,
+        description,
+        author,
+        read_time,
+        category_id,
+        content,
+        tags,
+      } = req.body;
       const thumbnail = req.files?.thumbnail;
       const post = await PostModel.getById(req.params.id);
 
@@ -253,11 +283,11 @@ export const PostController = {
         return next(error);
       }
 
-      // overwrite markdown file
+      // Overwrite markdown file
       const mdPath = path.join(__dirname, "..", "public", post.post_url);
       fs.writeFileSync(mdPath, content, "utf-8");
 
-      // save new thumbnail if uploaded
+      // Save new thumbnail if uploaded
       let thumbnail_url = post.thumbnail_url;
       if (thumbnail) {
         const thumbName = `${Date.now()}-${thumbnail.name}`;
@@ -273,6 +303,7 @@ export const PostController = {
         thumbnail_url = `/uploads/images/${thumbName}`;
       }
 
+      // Update post
       await PostModel.update(req.params.id, {
         title,
         description,
@@ -283,12 +314,18 @@ export const PostController = {
         thumbnail_url,
       });
 
+      // Update tags
+      await PostModel.clearTags(req.params.id);
+      if (tags) {
+        const tagIds = Array.isArray(tags) ? tags : [tags];
+        await PostModel.attachTags(req.params.id, tagIds);
+      }
+
       res.redirect(`/posts/${req.params.id}`);
     } catch (err) {
       next(err);
     }
   },
-
   // POST /posts/:id/delete → delete post
   async delete(req, res, next) {
     try {

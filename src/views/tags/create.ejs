@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Tag</title>
+  <link rel="stylesheet" href="/css/categories.css">
+</head>
+<body>
+
+  <%- include("../partials/navbar") %>
+
+  <div class="container">
+    <h1>Add New Tag</h1>
+
+    <form action="/tags/new" method="POST" class="form">
+
+      <label>Name</label>
+      <input type="text" name="name" required>
+
+      <button class="btn btn-success">Create</button>
+    </form>
+  </div>
+
+  <%- include("../partials/footer") %>
+</body>
+</html>

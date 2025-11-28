@@ -230,14 +230,35 @@ export const PostModel = {
   },
 
   // Update post
-  async update(id, { title, description }) {
+  async update(
+    id,
+    {
+      title,
+      description,
+      author,
+      read_time,
+      category_id,
+      post_url,
+      thumbnail_url,
+    }
+  ) {
     const [result] = await pool.query(
       `
-      UPDATE posts
-      SET title = ?, description = ?
-      WHERE post_id = ?
-      `,
-      [title, description, id]
+    UPDATE posts
+    SET title = ?, description = ?, author = ?, read_time = ?,
+        category_id = ?, post_url = ?, thumbnail_url = ?
+    WHERE post_id = ?
+    `,
+      [
+        title,
+        description,
+        author,
+        read_time,
+        category_id,
+        post_url,
+        thumbnail_url,
+        id,
+      ]
     );
 
     return result.affectedRows > 0;

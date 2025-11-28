@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Post - Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 min-h-screen font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+      <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <a href="/" class="text-2xl font-bold text-gray-900">Blog</a>
+          <div class="flex gap-4">
+            <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
+            <a href="/posts" class="text-gray-600 hover:text-gray-900">All Posts</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-6 py-10">
+      <div class="bg-white rounded-2xl shadow-sm p-8">
+        <h1 class="text-3xl font-bold mb-2 text-gray-900">Edit Post</h1>
+        <p class="text-gray-600 mb-6">Update your post content</p>
+
+        <form action="/posts/update/<%= post.post_id %>" method="POST" enctype="multipart/form-data">
+          <!-- Title -->
+          <div class="mb-6">
+            <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+              Post Title *
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value="<%= post.title %>"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+          </div>
+
+          <!-- Description -->
+          <div class="mb-6">
+            <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
+              Short Description *
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              rows="2"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            ><%= post.description %></textarea>
+          </div>
+
+          <!-- Author & Read Time -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label for="author" class="block text-sm font-semibold text-gray-700 mb-2">
+                Author *
+              </label>
+              <input
+                type="text"
+                id="author"
+                name="author"
+                value="<%= post.author %>"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="read_time" class="block text-sm font-semibold text-gray-700 mb-2">
+                Read Time (minutes) *
+              </label>
+              <input
+                type="number"
+                id="read_time"
+                name="read_time"
+                value="<%= post.read_time %>"
+                min="1"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Category -->
+          <div class="mb-6">
+            <label for="category_id" class="block text-sm font-semibold text-gray-700 mb-2">
+              Category *
+            </label>
+            <select
+              id="category_id"
+              name="category_id"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            >
+              <option value="" disabled>Choose a category</option>
+              <% if (typeof categories !== 'undefined' && categories) { %>
+                <% categories.forEach(category => { %>
+                  <option value="<%= category.cat_id %>" <%= post.category_id === category.cat_id ? 'selected' : '' %>>
+                    <%= category.name %>
+                  </option>
+                <% }); %>
+              <% } %>
+            </select>
+          </div>
+
+          <!-- Tags -->
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
+              Tags (select multiple)
+            </label>
+            <div class="border border-gray-300 rounded-lg p-4 max-h-48 overflow-y-auto bg-gray-50">
+              <% if (typeof tags !== 'undefined' && tags) { %>
+                <% 
+                  const selectedTagIds = post.tags ? post.tags.map(t => t.tag_id) : [];
+                %>
+                <% tags.forEach(tag => { %>
+                  <label class="flex items-center gap-2 py-2 hover:bg-white px-2 rounded cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="tags[]"
+                      value="<%= tag.tag_id %>"
+                      <%= selectedTagIds.includes(tag.tag_id) ? 'checked' : '' %>
+                      class="rounded text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span class="text-sm text-gray-700"><%= tag.name %></span>
+                  </label>
+                <% }); %>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Current Thumbnail -->
+          <% if (post.thumbnail_url) { %>
+            <div class="mb-4">
+              <label class="block text-sm font-semibold text-gray-700 mb-2">
+                Current Thumbnail
+              </label>
+              <img src="<%= post.thumbnail_url %>" alt="Current thumbnail" class="w-48 h-32 object-cover rounded-lg border border-gray-300">
+            </div>
+          <% } %>
+
+          <!-- New Thumbnail Upload -->
+          <div class="mb-6">
+            <label for="thumbnail" class="block text-sm font-semibold text-gray-700 mb-2">
+              <%= post.thumbnail_url ? 'Replace Thumbnail' : 'Upload Thumbnail' %>
+            </label>
+            <input
+              type="file"
+              id="thumbnail"
+              name="thumbnail"
+              accept="image/*"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            />
+            <p class="mt-1 text-xs text-gray-500">Leave empty to keep current thumbnail</p>
+          </div>
+
+          <!-- Content (Markdown) -->
+          <div class="mb-6">
+            <label for="content" class="block text-sm font-semibold text-gray-700 mb-2">
+              Post Content (Markdown) *
+            </label>
+            <textarea
+              id="content"
+              name="content"
+              rows="12"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+              required
+            ><%= mdContent %></textarea>
+            <p class="mt-1 text-xs text-gray-500">Supports Markdown formatting</p>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex gap-4">
+            <button
+              type="submit"
+              class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+            >
+              Save Changes
+            </button>
+            <a
+              href="/posts/<%= post.post_id %>"
+              class="px-6 py-3 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition"
+            >
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 border-t bg-white">
+      <div class="max-w-7xl mx-auto px-6 py-6 text-sm text-gray-600 text-center">
+        © 2025 Blog. All rights reserved.
+      </div>
+    </footer>
+  </body>
+</html>

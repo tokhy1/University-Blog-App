@@ -12,6 +12,7 @@ import "./models/db.js";
 import indexRoutes from "./routes/index.js";
 import categoryRoutes from "./routes/categories.js";
 import postRoutes from "./routes/posts.js";
+import tagRoutes from "./routes/tags.js";
 
 // error handler
 import { errorHandler } from "./middlewares/errorHandler.js";
@@ -52,6 +53,7 @@ app.use(
 app.use("/", indexRoutes); // ADD THIS - Home page route
 app.use("/categories", categoryRoutes);
 app.use("/posts", postRoutes);
+app.use("/tags", tagRoutes);
 
 // -------------------
 // ERROR HANDLER
