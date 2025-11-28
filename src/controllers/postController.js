@@ -1,14 +1,85 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import pool from "../models/db.js";
 import { PostModel } from "../models/postModel.js";
+import { TagModel } from "../models/tagModel.js";
+import { CategoryModel } from "../models/categoryModel.js";
 import { marked } from "marked";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// NOTE - This posts need to be linked to tags, categories
 export const PostController = {
+  // GET / or /posts → Home page with optional filters
+  // GET / or /posts → Home page with optional filters
+  async home(req, res, next) {
+    try {
+      const { tags, categories } = req.query;
+      let posts;
+
+      // Filter by tags if provided
+      if (tags) {
+        const tagIds = Array.isArray(tags) ? tags : [tags];
+        posts = await PostModel.getByTags(tagIds);
+
+        // Add tags to each post
+        for (let post of posts) {
+          const [postTags] = await pool.query(
+            `SELECT tags.tag_id, tags.name FROM tags
+             INNER JOIN posts_tags ON tags.tag_id = posts_tags.tag_id
+             WHERE posts_tags.post_id = ?`,
+            [post.post_id]
+          );
+          post.tags = postTags;
+        }
+      }
+      // Filter by categories if provided
+      else if (categories) {
+        const categoryIds = Array.isArray(categories)
+          ? categories
+          : [categories];
+        posts = await PostModel.getByCategories(categoryIds);
+
+        // Add tags to each post
+        for (let post of posts) {
+          const [postTags] = await pool.query(
+            `SELECT tags.tag_id, tags.name FROM tags
+             INNER JOIN posts_tags ON tags.tag_id = posts_tags.tag_id
+             WHERE posts_tags.post_id = ?`,
+            [post.post_id]
+          );
+          post.tags = postTags;
+        }
+      }
+      // No filters - show all posts
+      else {
+        posts = await PostModel.getAllWithTags();
+      }
+
+      // Use TagModel and CategoryModel instead
+      const allTags = await TagModel.getAll();
+      const allCategories = await CategoryModel.getAll();
+
+      // Parse selected filters for highlighting
+      const selectedTags = tags ? (Array.isArray(tags) ? tags : [tags]) : [];
+      const selectedCategories = categories
+        ? Array.isArray(categories)
+          ? categories
+          : [categories]
+        : [];
+
+      res.render("home", {
+        posts,
+        allTags,
+        allCategories,
+        selectedTags,
+        selectedCategories,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
   // GET /posts → list all posts
   async index(req, res, next) {
     try {
@@ -39,6 +110,51 @@ export const PostController = {
       }
 
       res.render("posts/show", { post, htmlContent });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  // GET /posts/category/:categoryId → show posts by category
+  async showByCategory(req, res, next) {
+    try {
+      const posts = await PostModel.getByCategory(req.params.categoryId);
+
+      // Get category name for display
+      const [category] = await pool.query(
+        "SELECT name FROM categories WHERE cat_id = ?",
+        [req.params.categoryId]
+      );
+
+      const categoryName = category[0]?.name || "Unknown Category";
+
+      res.render("posts/index", {
+        posts,
+        filterType: "category",
+        filterName: categoryName,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  // GET /posts/tag/:tagId → show posts by tag
+  async showByTag(req, res, next) {
+    try {
+      const posts = await PostModel.getByTag(req.params.tagId);
+
+      // Get tag name for display
+      const [tag] = await pool.query("SELECT name FROM tags WHERE tag_id = ?", [
+        req.params.tagId,
+      ]);
+
+      const tagName = tag[0]?.name || "Unknown Tag";
+
+      res.render("posts/index", {
+        posts,
+        filterType: "tag",
+        filterName: tagName,
+      });
     } catch (err) {
       next(err);
     }

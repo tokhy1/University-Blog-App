@@ -1,4 +1,3 @@
-// src/app.js
 import "dotenv/config";
 import express from "express";
 import path from "path";
@@ -10,6 +9,7 @@ import fileUpload from "express-fileupload";
 import "./models/db.js";
 
 // routes
+import indexRoutes from "./routes/index.js";
 import categoryRoutes from "./routes/categories.js";
 import postRoutes from "./routes/posts.js";
 
@@ -30,18 +30,18 @@ app.set("view engine", "ejs");
 // -------------------
 // STATIC + BODY PARSING
 // -------------------
-app.use(express.static(path.join(__dirname, "public"))); // serves /public
-app.use(express.urlencoded({ extended: true })); // parse urlencoded form data
-app.use(express.json()); // parse JSON
-app.use(methodOverride("_method")); // for PUT/DELETE forms
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(methodOverride("_method"));
 
 // -------------------
 // FILE UPLOAD
 // -------------------
 app.use(
   fileUpload({
-    createParentPath: true, // automatically create folders if missing
-    limits: { fileSize: 10 * 1024 * 1024 }, // max 10MB
+    createParentPath: true,
+    limits: { fileSize: 10 * 1024 * 1024 },
     abortOnLimit: true,
   })
 );
@@ -49,14 +49,12 @@ app.use(
 // -------------------
 // ROUTES
 // -------------------
+app.use("/", indexRoutes); // ADD THIS - Home page route
 app.use("/categories", categoryRoutes);
 app.use("/posts", postRoutes);
 
-// root redirect
-app.get("/", (req, res) => res.redirect("/posts"));
-
 // -------------------
-// ERROR HANDLER (LAST)
+// ERROR HANDLER
 // -------------------
 app.use(errorHandler);
 

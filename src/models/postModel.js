@@ -54,6 +54,133 @@ export const PostModel = {
     return post;
   },
 
+  // Get posts by category
+  async getByCategory(categoryId) {
+    const [rows] = await pool.query(
+      `
+    SELECT
+      posts.post_id,
+      posts.title,
+      posts.description,
+      posts.author,
+      posts.read_time,
+      posts.created_at,
+      posts.post_url,
+      posts.thumbnail_url,
+      categories.name AS category_name
+    FROM posts
+    LEFT JOIN categories ON posts.category_id = categories.cat_id
+    WHERE posts.category_id = ?
+    ORDER BY posts.post_id DESC
+    `,
+      [categoryId]
+    );
+    return rows;
+  },
+
+  // Get posts by tag
+  async getByTag(tagId) {
+    const [rows] = await pool.query(
+      `
+    SELECT
+      posts.post_id,
+      posts.title,
+      posts.description,
+      posts.author,
+      posts.read_time,
+      posts.created_at,
+      posts.post_url,
+      posts.thumbnail_url,
+      categories.name AS category_name
+    FROM posts
+    LEFT JOIN categories ON posts.category_id = categories.cat_id
+    INNER JOIN posts_tags ON posts.post_id = posts_tags.post_id
+    WHERE posts_tags.tag_id = ?
+    ORDER BY posts.post_id DESC
+    `,
+      [tagId]
+    );
+    return rows;
+  },
+
+  // Get posts by multiple tags (any post that has at least one of the tags)
+  async getByTags(tagIds) {
+    if (!tagIds || tagIds.length === 0) return [];
+
+    const placeholders = tagIds.map(() => "?").join(",");
+    const [rows] = await pool.query(
+      `
+      SELECT DISTINCT
+        posts.post_id,
+        posts.title,
+        posts.description,
+        posts.author,
+        posts.read_time,
+        posts.created_at,
+        posts.post_url,
+        posts.thumbnail_url,
+        categories.name AS category_name,
+        posts.category_id
+      FROM posts
+      LEFT JOIN categories ON posts.category_id = categories.cat_id
+      INNER JOIN posts_tags ON posts.post_id = posts_tags.post_id
+      WHERE posts_tags.tag_id IN (${placeholders})
+      ORDER BY posts.post_id DESC
+      `,
+      tagIds
+    );
+    return rows;
+  },
+
+  // Get posts by multiple categories
+  async getByCategories(categoryIds) {
+    if (!categoryIds || categoryIds.length === 0) return [];
+
+    const placeholders = categoryIds.map(() => "?").join(",");
+    const [rows] = await pool.query(
+      `
+      SELECT
+        posts.post_id,
+        posts.title,
+        posts.description,
+        posts.author,
+        posts.read_time,
+        posts.created_at,
+        posts.post_url,
+        posts.thumbnail_url,
+        categories.name AS category_name,
+        posts.category_id
+      FROM posts
+      LEFT JOIN categories ON posts.category_id = categories.cat_id
+      WHERE posts.category_id IN (${placeholders})
+      ORDER BY posts.post_id DESC
+      `,
+      categoryIds
+    );
+    return rows;
+  },
+
+  // Get posts with their tags (for displaying tags on each post card)
+  async getAllWithTags() {
+    const posts = await this.getAll();
+
+    // Fetch tags for all posts
+    for (let post of posts) {
+      const [tags] = await pool.query(
+        `
+        SELECT tags.tag_id, tags.name
+        FROM tags
+        INNER JOIN posts_tags ON tags.tag_id = posts_tags.tag_id
+        WHERE posts_tags.post_id = ?
+        `,
+        [post.post_id]
+      );
+      post.tags = tags;
+    }
+
+    return posts;
+  },
+
   // Create post
   async create({
     title,
@@ -103,7 +230,6 @@ export const PostModel = {
   },
 
   // Update post
-  // NOTE - When update the content of the post wer're not going to update it in database just in backend.
   async update(id, { title, description }) {
     const [result] = await pool.query(
       `

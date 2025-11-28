@@ -6,6 +6,12 @@ const router = express.Router();
 // List all posts
 router.get("/", PostController.index);
 
+// Show posts by a given category
+router.get("/category/:categoryId", PostController.showByCategory);
+
+// Show posts by a given tag
+router.get("/tag/:tagId", PostController.showByTag);
+
 // Show form to create a new post
 router.get("/create", PostController.createForm);
 
