@@ -4,51 +4,54 @@
     <meta charset="UTF-8" />
     <title>All Tags</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/css/categories.css" />
   </head>
-  <body>
+  <body class="bg-gray-100 font-sans m-0 p-0">
+
     <%- include("../partials/navbar") %>
 
-    <div class="container">
-      <h1>Tags</h1>
+    <div class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-md">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Tags</h1>
+        <a href="/tags/create" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg">
+          Add New Tag
+        </a>
+      </div>
 
-      <a href="/tags/create" class="btn btn-primary">Add New Tag</a>
-
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% if (tags.length === 0) { %>
-          <tr>
-            <td colspan="4">No tags found.</td>
-          </tr>
-          <% } else { %> <% tags.forEach(tag => { %>
-          <tr>
-            <td><%= tag.tag_id %></td>
-            <td><%= tag.name %></td>
-            <td>
-              <a href="/tags/<%= tag.tag_id %>/edit" class="btn btn-warning"
-                >Edit</a
-              >
-
-              <form
-                action="/tags/<%= tag.tag_id %>/delete"
-                method="POST"
-                style="display: inline"
-              >
-                <button class="btn btn-danger">Delete</button>
-              </form>
-            </td>
-          </tr>
-          <% }) %> <% } %>
-        </tbody>
-      </table>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-200 divide-y divide-gray-200">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-4 py-2 text-left text-gray-700 font-medium">ID</th>
+              <th class="px-4 py-2 text-left text-gray-700 font-medium">Name</th>
+              <th class="px-4 py-2 text-left text-gray-700 font-medium">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% if (tags.length === 0) { %>
+            <tr>
+              <td colspan="3" class="px-4 py-2 text-gray-500 text-center">No tags found.</td>
+            </tr>
+            <% } else { %>
+            <% tags.forEach(tag => { %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2 text-gray-700"><%= tag.tag_id %></td>
+              <td class="px-4 py-2 text-gray-700"><%= tag.name %></td>
+              <td class="px-4 py-2 flex gap-2">
+                <a href="/tags/<%= tag.tag_id %>/edit" class="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded-lg">
+                  Edit
+                </a>
+                <form action="/tags/<%= tag.tag_id %>/delete" method="POST">
+                  <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded-lg">
+                    Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <%- include("../partials/footer") %>

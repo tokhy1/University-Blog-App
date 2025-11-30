@@ -17,3 +17,6 @@ Thumbs.db
 # Build outputs (if any)
 dist/
 build/
+
+# Server uploads
+public/uploads
