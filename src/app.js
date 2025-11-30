@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import methodOverride from "method-override";
 import fileUpload from "express-fileupload";
+import expressLayouts from "express-ejs-layouts";
 
 // import DB to initialize pool/test connection
 import "./models/db.js";
@@ -31,6 +32,11 @@ app.set("view engine", "ejs");
 // -------------------
 // STATIC + BODY PARSING
 // -------------------
+app.use(expressLayouts);
+app.set("layout", "layouts/layout");
+app.set("layout extractScripts", true);
+app.set("layout extractStyles", true);
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

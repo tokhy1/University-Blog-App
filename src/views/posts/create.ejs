@@ -1,178 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Post - Blog</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-gray-50 min-h-screen font-sans">
-    <!-- Navigation -->
-    <%- include("../partials/navbar") %>
+<% title = 'Create Post - My Phlog' %>
 
-    <main class="max-w-3xl mx-auto px-6 py-10">
-      <div class="bg-white rounded-2xl shadow-sm p-8">
-        <h1 class="text-3xl font-bold mb-2 text-gray-900">Create New Post</h1>
-        <p class="text-gray-600 mb-6">Share your thoughts with the world</p>
+<div class="max-w-3xl mx-auto px-6 py-10">
+  <div class="bg-white rounded-2xl shadow-sm p-8">
+    <h1 class="text-3xl font-bold mb-2 text-gray-900">Create New Post</h1>
+    <p class="text-gray-600 mb-6">Share your thoughts with the world</p>
 
-        <form action="/posts/new" method="POST" enctype="multipart/form-data">
-          <!-- Title -->
-          <div class="mb-6">
-            <label
-              for="title"
-              class="block text-sm font-semibold text-gray-700 mb-2"
-            >
-              Post Title *
-            </label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter an engaging title..."
-              required
-            />
-          </div>
+    <form action="/posts/new" method="POST" enctype="multipart/form-data">
+      <!-- Title -->
+      <div class="mb-6">
+        <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+          Post Title *
+        </label>
+        <input type="text" id="title" name="title"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Enter an engaging title..." required />
+      </div>
 
-          <!-- Description -->
-          <div class="mb-6">
-            <label
-              for="description"
-              class="block text-sm font-semibold text-gray-700 mb-2"
-            >
-              Short Description *
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              rows="2"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Brief summary of your post..."
-              required
-            ></textarea>
-          </div>
+      <!-- Description -->
+      <div class="mb-6">
+        <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
+          Short Description *
+        </label>
+        <textarea id="description" name="description" rows="2"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Brief summary of your post..." required></textarea>
+      </div>
 
-          <!-- Author & Read Time -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <label
-                for="author"
-                class="block text-sm font-semibold text-gray-700 mb-2"
-              >
-                Author *
-              </label>
-              <input
-                type="text"
-                id="author"
-                name="author"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Your name"
-                required
-              />
-            </div>
+      <!-- Author & Read Time -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <label for="author" class="block text-sm font-semibold text-gray-700 mb-2">
+            Author *
+          </label>
+          <input type="text" id="author" name="author"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Your name" required />
+        </div>
 
-            <div>
-              <label
-                for="read_time"
-                class="block text-sm font-semibold text-gray-700 mb-2"
-              >
-                Read Time (minutes) *
-              </label>
-              <input
-                type="number"
-                id="read_time"
-                name="read_time"
-                min="1"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="5"
-                required
-              />
-            </div>
-          </div>
+        <div>
+          <label for="read_time" class="block text-sm font-semibold text-gray-700 mb-2">
+            Read Time (minutes) *
+          </label>
+          <input type="number" id="read_time" name="read_time" min="1"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="5" required />
+        </div>
+      </div>
 
-          <!-- Category -->
-          <div class="mb-6">
-            <label
-              for="category_id"
-              class="block text-sm font-semibold text-gray-700 mb-2"
-            >
-              Category *
-            </label>
-            <select
-              id="category_id"
-              name="category_id"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
-            >
-              <option value="" disabled selected>Choose a category</option>
-              <% if (typeof categories !== 'undefined' && categories) { %> <%
-              categories.forEach(category => { %>
-              <option value="<%= category.cat_id %>">
-                <%= category.name %>
-              </option>
-              <% }); %> <% } %>
-            </select>
-          </div>
+      <!-- Category -->
+      <div class="mb-6">
+        <label for="category_id" class="block text-sm font-semibold text-gray-700 mb-2">
+          Category *
+        </label>
+        <select id="category_id" name="category_id"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          required>
+          <option value="" disabled selected>Choose a category</option>
+          <% if (typeof categories !== 'undefined' && categories) { %>
+            <% categories.forEach(category => { %>
+              <option value="<%= category.cat_id %>"><%= category.name %></option>
+            <% }); %>
+          <% } %>
+        </select>
+      </div>
 
-          <!-- Tags -->
-          <div class="mb-6">
-            <label class="block text-sm font-semibold text-gray-700 mb-2">
-              Tags (select multiple)
-            </label>
-            <div
-              class="border border-gray-300 rounded-lg p-4 max-h-48 overflow-y-auto bg-gray-50"
-            >
-              <% if (typeof tags !== 'undefined' && tags) { %> <%
-              tags.forEach(tag => { %>
-              <label
-                class="flex items-center gap-2 py-2 hover:bg-white px-2 rounded cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  name="tags"
-                  value="<%= tag.tag_id %>"
-                  class="rounded text-blue-600 focus:ring-2 focus:ring-blue-500"
-                />
+      <!-- Tags -->
+      <div class="mb-6">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">
+          Tags (select multiple)
+        </label>
+        <div class="border border-gray-300 rounded-lg p-4 max-h-48 overflow-y-auto bg-gray-50">
+          <% if (typeof tags !== 'undefined' && tags) { %>
+            <% tags.forEach(tag => { %>
+              <label class="flex items-center gap-2 py-2 hover:bg-white px-2 rounded cursor-pointer">
+                <input type="checkbox" name="tags" value="<%= tag.tag_id %>"
+                  class="rounded text-blue-600 focus:ring-2 focus:ring-blue-500" />
                 <span class="text-sm text-gray-700"><%= tag.name %></span>
               </label>
-              <% }); %> <% } %>
-            </div>
-          </div>
+            <% }); %>
+          <% } %>
+        </div>
+      </div>
 
-          <!-- Thumbnail Upload -->
-          <div class="mb-6">
-            <label
-              for="thumbnail"
-              class="block text-sm font-semibold text-gray-700 mb-2"
-            >
-              Thumbnail Image
-            </label>
-            <input
-              type="file"
-              id="thumbnail"
-              name="thumbnail"
-              accept="image/*"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-            />
-            <p class="mt-1 text-xs text-gray-500">
-              PNG, JPG, or JPEG (Max 10MB)
-            </p>
-          </div>
+      <!-- Thumbnail Upload -->
+      <div class="mb-6">
+        <label for="thumbnail" class="block text-sm font-semibold text-gray-700 mb-2">
+          Thumbnail Image
+        </label>
+        <input type="file" id="thumbnail" name="thumbnail" accept="image/*"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+        <p class="mt-1 text-xs text-gray-500">PNG, JPG, or JPEG (Max 10MB)</p>
+      </div>
 
-          <!-- Content (Markdown) -->
-          <div class="mb-6">
-            <label
-              for="content"
-              class="block text-sm font-semibold text-gray-700 mb-2"
-            >
-              Post Content (Markdown) *
-            </label>
-            <textarea
-              id="content"
-              name="content"
-              rows="12"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
-              placeholder="Write your content in Markdown...
+      <!-- Content (Markdown) -->
+      <div class="mb-6">
+        <label for="content" class="block text-sm font-semibold text-gray-700 mb-2">
+          Post Content (Markdown) *
+        </label>
+        <textarea id="content" name="content" rows="12"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+          placeholder="Write your content in Markdown...
 
 # Heading 1
 ## Heading 2
@@ -181,35 +108,21 @@
 *Italic text*
 
 - List item 1
-- List item 2"
-              required
-            ></textarea>
-            <p class="mt-1 text-xs text-gray-500">
-              Supports Markdown formatting
-            </p>
-          </div>
-
-          <!-- Buttons -->
-          <div class="flex gap-4">
-            <button
-              type="submit"
-              class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
-            >
-              Create Post
-            </button>
-            <a
-              href="/posts"
-              class="px-6 py-3 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition"
-            >
-              Cancel
-            </a>
-          </div>
-        </form>
+- List item 2" required></textarea>
+        <p class="mt-1 text-xs text-gray-500">Supports Markdown formatting</p>
       </div>
-    </main>
 
-    <!-- Footer -->
-    <%- include("../partials/footer") %>
-    
-  </body>
-</html>
+      <!-- Buttons -->
+      <div class="flex gap-4">
+        <button type="submit"
+          class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+          Create Post
+        </button>
+        <a href="/posts"
+          class="px-6 py-3 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

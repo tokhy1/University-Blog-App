@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= typeof title !== 'undefined' ? title : 'My Phlog' %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <% if (typeof extraStyles !== 'undefined') { %> <%- extraStyles %> <% } %>
+  </head>
+  <body class="bg-gray-50 min-h-screen font-sans text-gray-800 flex flex-col">
+    <%- include("../partials/navbar") %>
+
+    <main class="flex-1"><%- body %></main>
+
+    <%- include("../partials/footer") %> <% if (typeof extraScripts !==
+    'undefined') { %> <%- extraScripts %> <% } %>
+  </body>
+</html>
