@@ -5,6 +5,7 @@ import pool from "../models/db.js";
 import { PostModel } from "../models/postModel.js";
 import { TagModel } from "../models/tagModel.js";
 import { CategoryModel } from "../models/categoryModel.js";
+import { CommentModel } from "../models/commentModel.js";
 import { marked } from "marked";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -99,16 +100,52 @@ export const PostController = {
         return next(error);
       }
 
-      // read the Markdown file and convert to HTML
-      const mdPath = path.join(__dirname, "..", "public", post.post_url);
+      // Read the Markdown file and convert to HTML
       let htmlContent = "";
 
-      if (fs.existsSync(mdPath)) {
-        const mdData = fs.readFileSync(mdPath, "utf-8");
-        htmlContent = marked(mdData);
+      if (post.post_url) {
+        const mdPath = path.join(__dirname, "..", "public", post.post_url);
+        if (fs.existsSync(mdPath)) {
+          const mdData = fs.readFileSync(mdPath, "utf-8");
+          htmlContent = marked(mdData);
+        }
+      } else {
+        htmlContent = `<p>${post.description}</p>`;
       }
 
-      res.render("posts/show", { post, htmlContent });
+      // Get comments for this post
+      const comments = await CommentModel.getByPostId(req.params.id);
+
+      res.render("posts/show", { post, htmlContent, comments });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  // Add new method for creating comments
+  async addComment(req, res, next) {
+    try {
+      const { name, email, content } = req.body;
+      const postId = req.params.id;
+
+      // Validate post exists
+      const post = await PostModel.getById(postId);
+      if (!post) {
+        const error = new Error("Post not found");
+        error.status = 404;
+        return next(error);
+      }
+
+      // Create comment
+      await CommentModel.create({
+        post_id: postId,
+        name,
+        email,
+        content,
+      });
+
+      // Redirect back to the post
+      res.redirect(`/posts/${postId}`);
     } catch (err) {
       next(err);
     }

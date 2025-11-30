@@ -21,6 +21,9 @@ router.post("/new", PostController.create);
 // Show single post
 router.get("/:id", PostController.show);
 
+// Adding a comment for specific post
+router.post("/:id/comment", PostController.addComment);
+
 // Show form to edit a post
 router.get("/:id/edit", PostController.editForm);
 
