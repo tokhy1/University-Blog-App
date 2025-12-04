@@ -9,7 +9,7 @@ This project demonstrates **CRUD operations**, **relational database design**, a
 ## Features
 - Create, view, edit, and delete posts  
 - Assign posts to categories  
-- Add multiple tags to posts (many-to-many relationship)  
+- Add multiple tags to posts
 - Optional comments for posts  
 - Upload thumbnails for posts  
 - Server-rendered with EJS templates  
