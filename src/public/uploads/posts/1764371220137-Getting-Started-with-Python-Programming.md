@@ -5,5 +5,6 @@ Python is one of the most popular programming languages in the world. It’s beg
 - Loops and conditionals
 - Functions and modules
 - Working with libraries like Pandas and NumPy
+- Backend Development
 
 Starting with Python can open doors to many exciting tech opportunities.
