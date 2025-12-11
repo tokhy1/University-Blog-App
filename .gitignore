@@ -1,22 +1,45 @@
-# Node modules
+# Dependencies
 node_modules/
-
-# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
 
-# Environment variables
+# Environment Variables
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# OS files
+# Uploads (user-generated content)
+src/public/uploads/posts/*
+src/public/uploads/images/*
+!src/public/uploads/posts/.gitkeep
+!src/public/uploads/images/.gitkeep
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
-Thumbs.db
 
-# Build outputs (if any)
+# Logs
+logs/
+*.log
+
+# Operating System
+Thumbs.db
+.DS_Store
+
+# Build files
 dist/
 build/
 
-# Server uploads
-public/uploads
+# Testing
+coverage/
+
+# Temporary files
+tmp/
+temp/
