@@ -1,4 +1,7 @@
 <?php
+
+require_once __DIR__ . '/config/config.php';
+
 $pageTitle = 'Home';
 require_once ROOT_PATH . '/classes/Post.php';
 require_once ROOT_PATH . '/classes/Category.php';
