@@ -14,7 +14,7 @@ if (empty($_SESSION['csrf_token'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= e($pageTitle ?? 'Admin') ?> — Inkwell Admin</title>
+    <title><?= e($pageTitle ?? 'Admin') ?> — MyPhlog Admin</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
     <meta name="csrf-token" content="<?= $_SESSION['csrf_token'] ?>">
     <script>
@@ -38,7 +38,7 @@ if (empty($_SESSION['csrf_token'])) {
 
     <aside class="admin-sidebar" id="adminSidebar">
         <div class="sidebar-brand">
-            <a href="<?= BASE_URL ?>/admin/">Inkwell</a>
+            <a href="<?= BASE_URL ?>/admin/">MyPhlog</a>
             <span class="sidebar-badge">Admin</span>
         </div>
 

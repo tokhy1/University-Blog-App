@@ -19,7 +19,7 @@ if (empty($_SESSION['csrf_token'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php e($pageTitle ?? 'Inkwell'); ?></title>
+    <title><?php e($pageTitle ?? 'MyPhlog'); ?></title>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
     <meta name="csrf-token" content="<?= $_SESSION['csrf_token'] ?>">
     <script>
@@ -41,7 +41,7 @@ if (empty($_SESSION['csrf_token'])) {
 
     <header class="site-header">
         <div class="container header-inner">
-            <a href="<?= BASE_URL ?>" class="logo">Inkwell</a>
+            <a href="<?= BASE_URL ?>" class="logo">MyPhlog</a>
 
             <nav class="main-nav" id="mainNav">
                 <a href="<?= BASE_URL ?>">Home</a>

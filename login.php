@@ -80,4 +80,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-<?php require_once ROOT_PATH . '/includes/footer.php'; ?> 
+<?php require_once ROOT_PATH . '/includes/footer.php'; ?>

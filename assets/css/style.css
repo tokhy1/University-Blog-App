@@ -172,7 +172,7 @@ input, textarea, select, button { font-family: inherit; }
 
 .checkbox-label {
     display: inline-flex; align-items: center; gap: 8px;
-    font-size: 0.85rem; color: var(--gray-600); cursor: pointer;
+    font-size: 0.85rem; color: var(--gray-600); cursor: pointer; margin-bottom: 10px;
 }
 .checkbox-label input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--gray-900); }
 
