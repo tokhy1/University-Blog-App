@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Comments';
+require_once dirname(__DIR__) . '/config/database.php';$pageTitle = 'Comments';
 $activePage = 'comments';
 require_once ROOT_PATH . '/classes/Auth.php';
 require_once ROOT_PATH . '/classes/Comment.php';

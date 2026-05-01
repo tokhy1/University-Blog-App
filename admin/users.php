@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__DIR__) . '/config/database.php';
 $pageTitle = 'Users';
 $activePage = 'users';
 require_once ROOT_PATH . '/classes/Auth.php';

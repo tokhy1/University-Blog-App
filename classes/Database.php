@@ -1,5 +1,4 @@
 <?php
-require_once ROOT_PATH . '/config/database.php';
 
 class Database
 {

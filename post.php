@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/config/database.php';
+
 require_once ROOT_PATH . '/classes/Post.php';
 require_once ROOT_PATH . '/classes/Comment.php';
 require_once ROOT_PATH . '/classes/Like.php';

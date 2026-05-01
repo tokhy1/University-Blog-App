@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__DIR__) . '/config/database.php';
 $pageTitle = 'Edit Post';
 $activePage = 'posts';
 require_once ROOT_PATH . '/classes/Auth.php';
@@ -36,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categoryId = intval($_POST['category_id'] ?? 0);
     $userId = intval($_POST['user_id'] ?? $post['user_id']);
     $content = trim($_POST['content'] ?? '');
-    $status = $_POST['status'] ?? $post['status'];
+    $status = $_POST['submit_action'] ?? $_POST['status'] ?? $post['status'];
     $tagsInput = trim($_POST['tags'] ?? '');
     $removeThumb = isset($_POST['remove_thumbnail']);
 

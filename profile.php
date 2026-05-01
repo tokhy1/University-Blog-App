@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/config/database.php';
+
 $pageTitle = 'My Profile';
 require_once ROOT_PATH . '/classes/Auth.php';
 require_once ROOT_PATH . '/classes/User.php';
